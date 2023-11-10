@@ -1,6 +1,5 @@
 package Mersys;
 
-import com.github.javafaker.Faker;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
 import io.restassured.http.Cookies;
@@ -12,7 +11,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.*;
+import static org.hamcrest.Matchers.*;
 
+import com.github.javafaker.Faker;
 
 public class SubjectCategories {
     Faker randomGenerator=new Faker();
@@ -20,6 +21,7 @@ public class SubjectCategories {
     String SubjectName ="";
     String SubjectCode ="";
     boolean SubjectChecked = true;
+    boolean SubjectUnchecked= false;
 
 
 
@@ -67,10 +69,12 @@ public class SubjectCategories {
         SubjectCode=randomGenerator.code().asin();
 
 
-        Map<String,String> newSubject=new HashMap<>();
+        Object[] object=new Object[1];
+        Map<String,Object> newSubject=new HashMap<>();
         newSubject.put("name",SubjectName);
         newSubject.put("code",SubjectCode);
         newSubject.put("active", String.valueOf(SubjectChecked));
+        newSubject.put("translateName", new Object[1]);
 
 
         SubjectId=
@@ -92,10 +96,82 @@ public class SubjectCategories {
                 ;
         System.out.println("newSubject = " + newSubject);
 
+    }
+    @Test(dependsOnMethods = "createNewSubjectCategories")
+    public  void createNewSubjectCategoriesNegative(){
 
+        Object[] object=new Object[1];
+        Map<String,Object> newSubject=new HashMap<>();
+        newSubject.put("name",SubjectName);
+        newSubject.put("code",SubjectCode);
+        newSubject.put("active",SubjectChecked);
+        newSubject.put("translateName",new Object[1]);
+
+        given()
+                .spec(reqSpec)
+                .body(newSubject)
+                .log().body()
+
+
+                .when()
+                .post("/school-service/api/subject-categories")
+
+                .then()
+                .log().body()
+                .statusCode(400)
+                .body("message",containsString("already"))
+
+
+                ;
+    }
+
+    @Test(dependsOnMethods = "createNewSubjectCategoriesNegative" )
+    public void updateSubjectCategories(){
+        SubjectCode=randomGenerator.code().ean8();
+        String newSubjectName=randomGenerator.chuckNorris().fact();
+        Map<String,String> updatedSubjects=new HashMap<>();
+        updatedSubjects.put("id",SubjectId);
+        updatedSubjects.put("name",newSubjectName);
+        updatedSubjects.put("code",SubjectCode);
+
+
+        given()
+                .spec(reqSpec)
+                .body(updatedSubjects)
+
+
+
+                .when()
+                .put("/school-service/api/subject-categories")
+
+
+                .then()
+                .log().body()
+                .statusCode(200)
+                .body("name",equalTo(newSubjectName))
+
+        ;
+
+    }
+    @Test(dependsOnMethods = "updateSubjectCategories")
+    public void deleteSubjectCategories(){
+
+        given()
+                .spec(reqSpec)
+
+                .when()
+                .delete("/school-service/api/subject-categories/"+SubjectId)
+
+                .then()
+                .log().body()
+                .statusCode(200)
+
+
+                ;
 
 
     }
+
 
 
 }

@@ -32,7 +32,6 @@ public class SubjectCategories {
 
         baseURI= "https://test.mersys.io/";
 
-
         Map<String, String> userLogin=new HashMap<>();
         userLogin.put("username","turkeyts");
         userLogin.put("password", "TechnoStudy123");

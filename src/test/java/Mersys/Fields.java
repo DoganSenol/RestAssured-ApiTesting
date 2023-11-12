@@ -83,6 +83,33 @@ public class Fields {
 
 
 
+    @Test(dependsOnMethods = "createNewField")
+    public void createNewFieldNegative(){
+
+        Map<String,String> newField=new HashMap<>();
+        newField.put("name",rndFieldName);
+        newField.put("code",rndFieldCode);
+        newField.put("type","STRING");
+        newField.put("schoolId","646cbb07acf2ee0d37c6d984");
+
+
+        given()
+
+                .spec(reqSpec)
+                .body(newField)
+
+                .when()
+                .post("school-service/api/entity-field")
+
+                .then()
+                .log().body()
+                .statusCode(400)
+                .body("message",containsString("already"))
+
+        ;
+    }
+
+
 
 
 }

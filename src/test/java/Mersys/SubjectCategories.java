@@ -133,6 +133,7 @@ public class SubjectCategories {
         updatedSubjects.put("id",SubjectId);
         updatedSubjects.put("name",newSubjectName);
         updatedSubjects.put("code",SubjectCode);
+        updatedSubjects.put("active", String.valueOf(SubjectUnchecked));
 
 
         given()
@@ -168,6 +169,24 @@ public class SubjectCategories {
 
 
                 ;
+    }
+    @Test(dependsOnMethods = "deleteSubjectCategories" )
+    public void deleteSubjectCategoriesNegative(){
+
+        given()
+                .spec(reqSpec)
+
+                .when()
+                .delete("/school-service/api/subject-categories/"+SubjectId)
+
+                .then()
+                .log().body()
+                .statusCode(400)
+                .body("message", equalTo("SubjectCategory not  found"))
+
+
+                ;
+
 
 
     }

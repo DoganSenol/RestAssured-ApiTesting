@@ -22,9 +22,6 @@ public class SubjectCategories {
     String SubjectCode ="";
     boolean SubjectChecked = true;
     boolean SubjectUnchecked= false;
-
-
-
     RequestSpecification reqSpec;
 
     @BeforeClass

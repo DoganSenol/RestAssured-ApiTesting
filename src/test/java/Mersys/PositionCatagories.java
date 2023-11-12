@@ -73,6 +73,21 @@ public void createPosition() {
         .statusCode(201)
         .extract().path("id");
         }
+        @Test(dependsOnMethods = "createPosition")
+        public  void createPositionNegative(){
+        Map<String,String> newPosition = new HashMap<>();
+        newPosition.put("name",positionName);
+
+        given()
+                .spec(reqSpec)
+                .body(newPosition)
+                .when()
+                .post("school-service/api/position-category")
+                .then()
+                .contentType(ContentType.JSON)
+                .statusCode(400);
+
+        }
 
 
 

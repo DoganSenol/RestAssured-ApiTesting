@@ -21,7 +21,7 @@ public class Fields {
     Faker rndFaker = new Faker();
     String rndFieldName = "";
     String rndFieldCode = "";
-    String fieldId="";
+    String fieldId = "";
 
     @BeforeClass
     public void login() {
@@ -59,38 +59,36 @@ public class Fields {
         rndFieldName = rndFaker.name().firstName();
         rndFieldCode = rndFaker.code().imei();
 
-        Map<String,String> newField=new HashMap<>();
-        newField.put("name",rndFieldName);
-        newField.put("code",rndFieldCode);
-        newField.put("type","STRING");
-        newField.put("schoolId","646cbb07acf2ee0d37c6d984");
+        Map<String, String> newField = new HashMap<>();
+        newField.put("name", rndFieldName);
+        newField.put("code", rndFieldCode);
+        newField.put("type", "STRING");
+        newField.put("schoolId", "646cbb07acf2ee0d37c6d984");
 
-        fieldId=
-        given()
-                .spec(reqSpec)
-                .body(newField)
+        fieldId =
+                given()
+                        .spec(reqSpec)
+                        .body(newField)
 
-                .when()
-                .post("school-service/api/entity-field")
+                        .when()
+                        .post("school-service/api/entity-field")
 
-                .then()
-                .log().body()
-                .statusCode(201)
-                .extract().path("id")
-                ;
+                        .then()
+                        .log().body()
+                        .statusCode(201)
+                        .extract().path("id")
+        ;
     }
 
 
-
-
     @Test(dependsOnMethods = "createNewField")
-    public void createNewFieldNegative(){
+    public void createNewFieldNegative() {
 
-        Map<String,String> newField=new HashMap<>();
-        newField.put("name",rndFieldName);
-        newField.put("code",rndFieldCode);
-        newField.put("type","STRING");
-        newField.put("schoolId","646cbb07acf2ee0d37c6d984");
+        Map<String, String> newField = new HashMap<>();
+        newField.put("name", rndFieldName);
+        newField.put("code", rndFieldCode);
+        newField.put("type", "STRING");
+        newField.put("schoolId", "646cbb07acf2ee0d37c6d984");
 
 
         given()
@@ -104,12 +102,34 @@ public class Fields {
                 .then()
                 .log().body()
                 .statusCode(400)
-                .body("message",containsString("already"))
+                .body("message", containsString("already"))
 
         ;
     }
 
 
+    @Test(dependsOnMethods = "createNewFieldNegative")
+    public void updateField() {
+        String newFieldName= "UPDATED " + rndFieldName;
+        Map<String, String> updateField = new HashMap<>();
+        updateField.put("id", fieldId);
+        updateField.put("name", newFieldName);
+        updateField.put("code", rndFieldCode);
+        updateField.put("type", "STRING");
+        updateField.put("schoolId", "646cbb07acf2ee0d37c6d984");
 
+        given()
+                .spec(reqSpec)
+                .body(updateField)
+
+                .when()
+                .put("school-service/api/entity-field")
+
+                .then()
+                .log().body()
+                .statusCode(200)
+                .body("name", equalTo(newFieldName))
+        ;
+    }
 
 }

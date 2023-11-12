@@ -132,4 +132,20 @@ public class Fields {
         ;
     }
 
+
+    @Test(dependsOnMethods = "updateField")
+    public void deleteField(){
+
+        given()
+                .spec(reqSpec)
+
+                .when()
+                .delete("school-service/api/entity-field/"+fieldId)
+
+                .then()
+                .log().body()
+                .statusCode(204)
+                ;
+    }
+
 }

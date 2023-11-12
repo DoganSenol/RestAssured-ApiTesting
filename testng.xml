@@ -1,2 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd"><suite name="All Test Suite"><test verbose="2" preserve-order="true" name="C:/Users/senol/IdeaProjects/RestAssured-ApiTesting/src/test/java/Mersys/SubjectCategories.java"><classes><class name="Mersys.SubjectCategories"><methods><include name="createNewSubjectCategories"/><include name="createNewSubjectCategoriesNegative"/><include name="updateSubjectCategories"/><include name="deleteSubjectCategories"/><include name="deleteSubjectCategoriesNegative"/></methods></class></classes></test></suite>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="All Test Suite">
+    <test name="Main test">
+        <classes>
+            <class name="Mersys.SubjectCategories"></class>
+            <class name="Mersys.Discounts"></class>
+        </classes>
+    </test>
+</suite>

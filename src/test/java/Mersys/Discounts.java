@@ -178,8 +178,10 @@ public class Discounts {
 
 
                 .then()
+                .log().body()
                 .statusCode(400)
                 .body("message",equalTo("Discount not found"))
+
 
 
                 ;

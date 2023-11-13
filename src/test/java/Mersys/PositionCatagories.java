@@ -117,7 +117,16 @@ public void createPosition() {
                 .statusCode(204)
                ;
         }
-
+        @Test(dependsOnMethods = "deletePosition")
+        public  void deletePositionNegative(){
+        given()
+                .spec(reqSpec)
+                .when()
+                .delete("school-service/api/position-category"+positionID)
+                .then()
+                .statusCode(400)
+                .log().body();
+        }
 
 
 

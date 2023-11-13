@@ -107,6 +107,16 @@ public void createPosition() {
                 .body("name",equalTo("Jony"));
 
         }
+        @Test(dependsOnMethods = "updatePosition")
+        public  void  deletePosition(){
+        given()
+                .spec(reqSpec)
+                .when()
+                .delete("school-service/api/position-category"+positionID)
+                .then()
+                .statusCode(204)
+               ;
+        }
 
 
 

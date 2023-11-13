@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.*;
+import static org.hamcrest.Matchers.equalTo;
+
 public class PositionCatagories {
 
  RequestSpecification reqSpec;
@@ -88,6 +90,24 @@ public void createPosition() {
                 .statusCode(400);
 
         }
+        @Test(dependsOnMethods = "createPositionNegative")
+        public  void updatePosition(){
+        Map<String,String> updatePostion= new HashMap<>();
+        updatePostion.put("id",positionID);
+        updatePostion.put("name","Jony");
+
+        given()
+                .spec(reqSpec)
+                .body(updatePostion)
+                .when()
+                .post("school-service/api/position-category")
+                .then()
+                .contentType(ContentType.JSON)
+                .statusCode(200)
+                .body("name",equalTo("Jony"));
+
+        }
+
 
 
 

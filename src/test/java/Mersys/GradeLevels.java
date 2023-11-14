@@ -138,7 +138,29 @@ public class GradeLevels {
     }
 
 
+@Test(dependsOnMethods = "createNewGradeLevelNegative")
+    public void deleteGradeLevel(){
 
+    given()
+            .spec(reqSpec)
+
+            .when()
+            .delete("school-service/api/grade-levels/"+grdLvlId)
+
+            .then()
+            .log().body()
+            .statusCode(200)
+    ;
+
+
+
+
+
+
+
+
+
+}
 
 
 

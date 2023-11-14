@@ -90,7 +90,7 @@ public class Discounts {
                 .then()
                 .log().body()
                 .statusCode(201)
-                .extract().path("id")
+                .extract().jsonPath().getString("id")
         ;
         System.out.println("DiscountId = " + DiscountId);
 
@@ -123,23 +123,23 @@ public class Discounts {
         ;
     }
 
-    @Test(dependsOnMethods = "createNewDiscountNegative")
+    @Test(dependsOnMethods = "createNewDiscount")
     public void updateTheDiscount(){
+
+        DiscountDescription= randomGenerator.artist().name();
+        Map<String,Object> updatedDiscount=new HashMap<>();
+        updatedDiscount.put("id",DiscountId);
+        updatedDiscount.put("description",DiscountDescription);
+        updatedDiscount.put("code",DiscountCode);
+        updatedDiscount.put("priority", DiscountPriority);
+        updatedDiscount.put("active", String.valueOf(DiscountUnChecked));
+        updatedDiscount.put("translateDescription",new Object[1]);
 
 
 
         given()
                 .spec(reqSpec)
-                .body("{\n" +
-                        "  \"id\": \"65510a59b7c0f707edde1219\",\n" +
-                        "  \"description\": \"asret\",\n" +
-                        "  \"code\": \"klkd\",\n" +
-                        "  \"active\": true,\n" +
-                        "  \"translateDescription\": [\n" +
-                        "    null\n" +
-                        "  ],\n" +
-                        "  \"priority\": 11\n" +
-                        "}")
+                .body(updatedDiscount)
 
                 .when()
                 .put("/school-service/api/discounts")

@@ -151,18 +151,22 @@ public class GradeLevels {
             .log().body()
             .statusCode(200)
     ;
-
-
-
-
-
-
-
-
-
 }
 
+    @Test(dependsOnMethods = "deleteGradeLevel")
+    public void deleteGradeLevelnegative(){
 
+        given()
+                .spec(reqSpec)
+
+                .when()
+                .delete("school-service/api/grade-levels/"+grdLvlId)
+
+                .then()
+                .log().body()
+                .statusCode(400)
+        ;
+    }
 
 
 

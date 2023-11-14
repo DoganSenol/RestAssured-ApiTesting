@@ -86,6 +86,32 @@ public class GradeLevels {
     }
 
 
+    @Test(dependsOnMethods = "createNewGradeLevel")
+    public void createNewGradeLevelNegative() {
+
+        Map<String, String> newGrdLvl = new HashMap<>();
+        newGrdLvl.put("name", rndGrdLvlName);
+        newGrdLvl.put("shortName", rndGrdLvlShortName);
+        newGrdLvl.put("order", rndGrdLvlOrder);
+        newGrdLvl.put("active", "true");
+        newGrdLvl.put("enableForSelectedSchools", "true");
+
+
+        given()
+                        .spec(reqSpec)
+                        .body(newGrdLvl)
+
+                        .when()
+                        .post("school-service/api/grade-levels")
+
+                        .then()
+                        .log().body()
+                        .statusCode(400)
+                        .body("message", containsString("already"))
+        ;
+    }
+
+
 
 
 

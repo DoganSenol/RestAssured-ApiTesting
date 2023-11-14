@@ -81,7 +81,8 @@ public class GradeLevels {
                         .then()
                         .log().body()
                         .statusCode(201)
-                        .extract().jsonPath().getString("id")
+                      //  .extract().jsonPath().getString("id")
+                        .extract().path("id")
         ;
     }
 

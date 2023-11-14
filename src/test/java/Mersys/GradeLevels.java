@@ -114,6 +114,28 @@ public class GradeLevels {
 
 
 
+    @Test(alwaysRun = false)
+    public void updateGradeLevel() {
+
+        String newGrdLvlName="UPDATED"+rndGrdLvlName;
+        Map<String, String> updatedGrdLvl = new HashMap<>();
+        updatedGrdLvl.put("id", grdLvlId);
+        updatedGrdLvl.put("name", newGrdLvlName);
+
+
+        given()
+                .spec(reqSpec)
+                .body(updatedGrdLvl)
+
+                .when()
+                .put("school-service/api/grade-levels")
+
+                .then()
+                .log().body()
+                .statusCode(200)
+                .body("name", equalTo(newGrdLvlName))
+        ;
+    }
 
 
 

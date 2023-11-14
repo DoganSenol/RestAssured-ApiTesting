@@ -72,16 +72,16 @@ public class GradeLevels {
 
         grdLvlId=
                 given()
-                .spec(reqSpec)
-                .body(newGrdLvl)
+                        .spec(reqSpec)
+                        .body(newGrdLvl)
 
-                .when()
-                .post("school-service/api/grade-levels")
+                        .when()
+                        .post("school-service/api/grade-levels")
 
-                .then()
-                .log().body()
-                .statusCode(201)
-                .extract().path("id")
+                        .then()
+                        .log().body()
+                        .statusCode(201)
+                        .extract().jsonPath().getString("id")
         ;
     }
 
@@ -98,30 +98,33 @@ public class GradeLevels {
 
 
         given()
-                        .spec(reqSpec)
-                        .body(newGrdLvl)
+                .spec(reqSpec)
+                .body(newGrdLvl)
 
-                        .when()
-                        .post("school-service/api/grade-levels")
+                .when()
+                .post("school-service/api/grade-levels")
 
-                        .then()
-                        .log().body()
-                        .statusCode(400)
-                        .body("message", containsString("already"))
+                .then()
+                .log().body()
+                .statusCode(400)
+                .body("message", containsString("already"))
         ;
     }
 
 
 
 
-    @Test(alwaysRun = false)
+    @Test(dependsOnMethods = "createNewGradeLevel")
     public void updateGradeLevel() {
+       String  newName=rndFaker.artist().name();
 
-        String newGrdLvlName="UPDATED"+rndGrdLvlName;
         Map<String, String> updatedGrdLvl = new HashMap<>();
-        updatedGrdLvl.put("id", grdLvlId);
-        updatedGrdLvl.put("name", newGrdLvlName);
-
+        updatedGrdLvl.put("id",grdLvlId);
+        updatedGrdLvl.put("name", newName);
+        updatedGrdLvl.put("shortName", rndGrdLvlShortName);
+        updatedGrdLvl.put("order", rndGrdLvlOrder);
+        updatedGrdLvl.put("active", "true");
+        updatedGrdLvl.put("enableForSelectedSchools", "true");
 
         given()
                 .spec(reqSpec)
@@ -133,25 +136,25 @@ public class GradeLevels {
                 .then()
                 .log().body()
                 .statusCode(200)
-                .body("name", equalTo(newGrdLvlName))
+                .body("name", containsString(newName));
         ;
     }
 
 
-@Test(dependsOnMethods = "createNewGradeLevelNegative")
+    @Test(dependsOnMethods = "createNewGradeLevelNegative")
     public void deleteGradeLevel(){
 
-    given()
-            .spec(reqSpec)
+        given()
+                .spec(reqSpec)
 
-            .when()
-            .delete("school-service/api/grade-levels/"+grdLvlId)
+                .when()
+                .delete("school-service/api/grade-levels/"+grdLvlId)
 
-            .then()
-            .log().body()
-            .statusCode(200)
-    ;
-}
+                .then()
+                .log().body()
+                .statusCode(200)
+        ;
+    }
 
     @Test(dependsOnMethods = "deleteGradeLevel")
     public void deleteGradeLevelnegative(){
@@ -175,11 +178,3 @@ public class GradeLevels {
 
 
 }
-
-
-
-
-
-
-
-
